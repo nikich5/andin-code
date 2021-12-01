@@ -59,6 +59,7 @@ dependencies {
     def okhttp_version = "4.9.2"
     def play_services_base_version = "17.6.0"
 
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:$core_version"

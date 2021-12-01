@@ -33,7 +33,11 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                viewModel.likeById(post.id)
+                if (!post.likedByMe) {
+                    viewModel.likeById(post.id)
+                } else {
+                    viewModel.removeLikeById(post.id)
+                }
             }
 
             override fun onRemove(post: Post) {
@@ -61,6 +65,10 @@ class FeedFragment : Fragment() {
         })
 
         binding.retryButton.setOnClickListener {
+            viewModel.loadPosts()
+        }
+
+        binding.swipeRefresh.setOnRefreshListener {
             viewModel.loadPosts()
         }
 
