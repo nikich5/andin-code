@@ -68,8 +68,13 @@ class FeedFragment : Fragment() {
             viewModel.loadPosts()
         }
 
-        binding.swipeRefresh.setOnRefreshListener {
+        fun onRefresh() {
             viewModel.loadPosts()
+            binding.swiperefresh.isRefreshing = false
+        }
+
+        binding.swiperefresh.setOnRefreshListener {
+            onRefresh()
         }
 
         binding.fab.setOnClickListener {

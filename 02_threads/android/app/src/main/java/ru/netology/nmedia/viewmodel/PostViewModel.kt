@@ -75,7 +75,8 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             val old = _data.value?.posts.orEmpty()
             _data.postValue(
                 _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .map { if (it.id != id) it else it.copy(likedByMe = !it.likedByMe) }
+                    .map { if (it.id != id) it else it.copy(likedByMe = !it.likedByMe,
+                        likes = it.likes + 1) }
                 )
             )
             try {
@@ -91,11 +92,12 @@ class PostViewModel(application: Application) : AndroidViewModel(application) {
             val old = _data.value?.posts.orEmpty()
             _data.postValue(
                 _data.value?.copy(posts = _data.value?.posts.orEmpty()
-                    .map { if (it.id != id) it else it.copy(likedByMe = !it.likedByMe) }
+                    .map { if (it.id != id) it else it.copy(likedByMe = !it.likedByMe,
+                    likes = it.likes - 1) }
                 )
             )
             try {
-                repository.likeById(id)
+                repository.removeLikeById(id)
             } catch (e: IOException) {
                 _data.postValue(_data.value?.copy(posts = old))
             }
