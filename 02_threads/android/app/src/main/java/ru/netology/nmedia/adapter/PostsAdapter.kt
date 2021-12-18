@@ -51,6 +51,7 @@ class PostViewHolder(
                 .load("http://192.168.0.11:9999/avatars/${post.authorAvatar}")
                 .placeholder(R.drawable.ic_baseline_replay_24)
                 .error(R.drawable.ic_baseline_error_outline_24)
+                .fitCenter()
                 .timeout(10_000)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.avatar)
@@ -62,6 +63,8 @@ class PostViewHolder(
                     .load("http://192.168.0.11:9999/images/${post.attachment.url}")
                     .placeholder(R.drawable.ic_baseline_replay_24)
                     .error(R.drawable.ic_baseline_error_outline_24)
+                    .fitCenter()
+                    .centerCrop()
                     .timeout(10_000)
                     .into(binding.imageAttachment)
             }
