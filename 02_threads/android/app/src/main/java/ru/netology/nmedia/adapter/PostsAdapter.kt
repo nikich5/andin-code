@@ -19,7 +19,10 @@ interface OnInteractionListener {
     fun onEdit(post: Post) {}
     fun onRemove(post: Post) {}
     fun onShare(post: Post) {}
+    fun onImage(post: Post) {}
 }
+
+private const val BASE_URL = "http://192.168.0.10:9999"
 
 class PostsAdapter(
     private val onInteractionListener: OnInteractionListener,
@@ -48,10 +51,9 @@ class PostViewHolder(
             like.isChecked = post.likedByMe
             like.text = "${post.likes}"
 
-            if (post.authorAvatar == "") {
+            if (post.authorAvatar.isNotEmpty()) {
                 Glide.with(binding.avatar)
-                    .load("http://192.168.0.11:9999/avatars/${post.authorAvatar}")
-                    .placeholder(R.drawable.ic_baseline_replay_24)
+                    .load("$BASE_URL/avatars/${post.authorAvatar}")
                     .error(R.drawable.ic_baseline_error_outline_24)
                     .fitCenter()
                     .timeout(10_000)
@@ -59,12 +61,12 @@ class PostViewHolder(
                     .into(binding.avatar)
             }
 
-            if (post.attachment != null && post.attachment.type == AttachmentType.IMAGE) {
+            if (post.attachment == null) {
+                attachmentGroup.visibility = View.GONE
+            } else {
                 attachmentGroup.visibility = View.VISIBLE
-                imageAttachment.contentDescription = post.attachment.description
                 Glide.with(binding.imageAttachment)
-                    .load("http://192.168.0.11:9999/images/${post.attachment.url}")
-                    .placeholder(R.drawable.ic_baseline_replay_24)
+                    .load("$BASE_URL/media/${post.attachment.url}")
                     .error(R.drawable.ic_baseline_error_outline_24)
                     .fitCenter()
                     .centerCrop()
@@ -99,6 +101,8 @@ class PostViewHolder(
             share.setOnClickListener {
                 onInteractionListener.onShare(post)
             }
+
+            imageAttachment.setOnClickListener { onInteractionListener.onImage(post) }
         }
     }
 }
