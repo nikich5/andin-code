@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.CardPostBinding
-import ru.netology.nmedia.dto.AttachmentType
 import ru.netology.nmedia.dto.Post
 
 interface OnInteractionListener {
@@ -73,6 +72,8 @@ class PostViewHolder(
                     .timeout(10_000)
                     .into(binding.imageAttachment)
             }
+
+            menu.visibility = if (post.ownedByMe) View.VISIBLE else View.INVISIBLE
 
             menu.setOnClickListener {
                 PopupMenu(it.context, it).apply {

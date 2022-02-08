@@ -1,5 +1,6 @@
 package ru.netology.nmedia.activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
+import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.StringArg
@@ -39,10 +41,22 @@ class FeedFragment : Fragment() {
             }
 
             override fun onLike(post: Post) {
-                if (!post.likedByMe) {
-                    viewModel.likeById(post.id)
+                if (AppAuth.getInstance().authStateFlow.value.id == 0L) {
+                    AlertDialog.Builder(context)
+                        .setMessage(getString(R.string.sign_in_dialog_message))
+                        .setNegativeButton(getString(R.string.sign_in_dialog_later)) { _, _ ->
+                            return@setNegativeButton
+                        }
+                        .setPositiveButton(getString(R.string.sign_in_dialog_ok)) { _, _ ->
+                            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+                        }
+                        .show()
                 } else {
-                    viewModel.removeLikeById(post.id)
+                    if (!post.likedByMe) {
+                        viewModel.likeById(post.id)
+                    } else {
+                        viewModel.removeLikeById(post.id)
+                    }
                 }
             }
 
@@ -63,15 +77,14 @@ class FeedFragment : Fragment() {
             }
 
             override fun onImage(post: Post) {
-                findNavController().navigate(R.id.action_feedFragment_to_imageFragment)
-                Bundle().apply {
-                    textArg = post.attachment?.url
-                }
+                findNavController().navigate(R.id.action_feedFragment_to_imageFragment,
+                    Bundle().apply
+                    { textArg = post.attachment?.url })
             }
         })
         binding.list.adapter = adapter
 
-        viewModel.dataState.observe(viewLifecycleOwner, { state ->
+        viewModel.dataState.observe(viewLifecycleOwner) { state ->
             binding.progress.isVisible = state.loading
             binding.swiperefresh.isRefreshing = state.refreshing
             if (state.error) {
@@ -79,12 +92,13 @@ class FeedFragment : Fragment() {
                     .setAction(R.string.retry_loading) { viewModel.loadPosts() }
                     .show()
             }
-        })
+        }
 
-        viewModel.data.observe(viewLifecycleOwner, { state ->
+        viewModel.data.observe(viewLifecycleOwner) { state ->
             adapter.submitList(state.posts)
             binding.emptyText.isVisible = state.empty
-        })
+        }
+
         binding.retryButton.setOnClickListener {
             viewModel.loadPosts()
         }
@@ -99,7 +113,19 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            if (AppAuth.getInstance().authStateFlow.value.id == 0L) {
+                AlertDialog.Builder(context)
+                    .setMessage(getString(R.string.sign_in_dialog_message))
+                    .setNegativeButton(getString(R.string.sign_in_dialog_later)) { _, _ ->
+                        return@setNegativeButton
+                    }
+                    .setPositiveButton(getString(R.string.sign_in_dialog_ok)) { _, _ ->
+                        findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+                    }
+                    .show()
+            } else {
+                findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
+            }
         }
 
         return binding.root

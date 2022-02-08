@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/common_spacing"
+        android:text="@string/registration"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@id/name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_goneMarginBottom="@dimen/common_spacing" />
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="@dimen/common_spacing"
+        android:hint="@string/name"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toTopOf="@id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/login"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="50dp"
+        android:hint="@string/login"
+        android:inputType="textMultiLine"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@id/login"
+        app:layout_constraintStart_toStartOf="@id/login"
+        app:layout_constraintTop_toBottomOf="@id/login" />
+
+    <EditText
+        android:id="@+id/confirm_password"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:hint="@string/confirm_password"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/signUn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/common_spacing"
+        android:text="@string/signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/confirm_password" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

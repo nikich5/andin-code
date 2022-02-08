@@ -1,9 +1,11 @@
 package ru.netology.nmedia.repository
 
-import androidx.lifecycle.map
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.*
 import ru.netology.nmedia.dao.PostDao
 import ru.netology.nmedia.dto.*
 import ru.netology.nmedia.entity.PostEntity
@@ -16,7 +18,9 @@ import ru.netology.nmedia.error.UnknownError
 import java.io.IOException
 
 class PostRepositoryImpl(private val dao: PostDao) : PostRepository {
-    override val data = dao.getAll().map(List<PostEntity>::toDto)
+    override val data = dao.getAll()
+        .map(List<PostEntity>::toDto)
+        .flowOn(Dispatchers.Default)
 
     override suspend fun getAll() {
         try {

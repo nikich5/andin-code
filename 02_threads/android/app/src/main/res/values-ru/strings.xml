@@ -27,4 +27,21 @@
     <string name="description_select_photo">Выберите Фото</string>
     <string name="description_take_photo">Сделайте Фото</string>
     <string name="back">Вернуться</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="sign_out">Выйти</string>
+    <string name="enter_login_and_password">Введите логин и пароль</string>
+    <string name="login">логин</string>
+    <string name="password">пароль</string>
+    <string name="sign_in_dialog_message">Пожалуйста войдите для выполнения</string>
+    <string name="sign_in_dialog_ok">Продолжить</string>
+    <string name="sign_in_dialog_later">Позже</string>
+    <string name="sign_out_dialog_message">Вы действительно хотите выйти?</string>
+    <string name="sign_out_dialog_ok">Да</string>
+    <string name="sign_out_dialog_cancel">Нет</string>
+    <string name="registration">Регистрация</string>
+    <string name="confirm_password">подтвердите пароль</string>
+    <string name="name">имя</string>
+    <string name="signup">Зарегистрироваться</string>
+    <string name="password_error">Пароли не совпадают</string>
 </resources>

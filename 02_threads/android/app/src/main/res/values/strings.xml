@@ -26,4 +26,22 @@
     <string name="description_select_photo">Choose Photo</string>
     <string name="description_take_photo">Make Photo</string>
     <string name="back">back</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="enter_login_and_password">Enter login and password</string>
+    <string name="login">login</string>
+    <string name="password">password</string>
+    <string name="sign_in_dialog_message">Please login before proceeding</string>
+    <string name="sign_in_dialog_ok">Continue</string>
+    <string name="sign_in_dialog_later">Later</string>
+    <string name="sign_out_dialog_message">Do you really want to leave?</string>
+    <string name="sign_out_dialog_ok">Yes</string>
+    <string name="sign_out_dialog_cancel">No</string>
+    <string name="registration">Registration</string>
+    <string name="confirm_password">confirm_password</string>
+    <string name="name">name</string>
+    <string name="signup">signup</string>
+    <string name="password_error">Password mismatch</string>
+
 </resources>
