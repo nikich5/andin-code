@@ -1,6 +1,6 @@
 package ru.netology.nmedia.repository
 
-import ru.netology.nmedia.api.PostsApi
+import ru.netology.nmedia.api.Api
 import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.error.ApiError
 import ru.netology.nmedia.error.NetworkError
@@ -12,7 +12,7 @@ class SignRepositoryImpl : SignRepository {
 
     override suspend fun updateUser(login: String, password: String) {
         try {
-            val response = PostsApi.retrofitService.updateUser(login, password)
+            val response = Api.service.updateUser(login, password)
 
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
@@ -31,7 +31,7 @@ class SignRepositoryImpl : SignRepository {
 
     override suspend fun registerUser(login: String, password: String, name: String) {
         try {
-            val response = PostsApi.retrofitService.registerUser(login, password, name)
+            val response = Api.service.registerUser(login, password, name)
 
             if (!response.isSuccessful) {
                 throw ApiError(response.code(), response.message())
