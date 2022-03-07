@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.databinding.FtagmentSignInBinding
 import ru.netology.nmedia.viewmodel.SignViewModel
 
+@AndroidEntryPoint
 class SignInFragment : Fragment() {
 
     private val viewModel: SignViewModel by viewModels(

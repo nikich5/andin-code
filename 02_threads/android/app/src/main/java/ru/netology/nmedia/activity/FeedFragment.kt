@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
@@ -19,9 +20,12 @@ import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.PostViewModel
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeedFragment : Fragment() {
-
+    @Inject
+    lateinit var auth: AppAuth
     companion object {
         var Bundle.textArg: String? by StringArg
     }
@@ -34,23 +38,21 @@ class FeedFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val binding = FragmentFeedBinding.inflate(inflater, container, false)
-
+        val dialog = AlertDialog.Builder(context)
+            .setMessage(getString(R.string.sign_in_dialog_message))
+            .setNegativeButton(getString(R.string.sign_in_dialog_later)) { _, _ ->
+                return@setNegativeButton
+            }
+            .setPositiveButton(getString(R.string.sign_in_dialog_ok)) { _, _ ->
+                findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
+            }
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 viewModel.edit(post)
             }
-
             override fun onLike(post: Post) {
-                if (AppAuth.getInstance().authStateFlow.value.id == 0L) {
-                    AlertDialog.Builder(context)
-                        .setMessage(getString(R.string.sign_in_dialog_message))
-                        .setNegativeButton(getString(R.string.sign_in_dialog_later)) { _, _ ->
-                            return@setNegativeButton
-                        }
-                        .setPositiveButton(getString(R.string.sign_in_dialog_ok)) { _, _ ->
-                            findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
-                        }
-                        .show()
+                if (auth.authStateFlow.value.id == 0L) {
+                    dialog.show()
                 } else {
                     if (!post.likedByMe) {
                         viewModel.likeById(post.id)
@@ -113,16 +115,8 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            if (AppAuth.getInstance().authStateFlow.value.id == 0L) {
-                AlertDialog.Builder(context)
-                    .setMessage(getString(R.string.sign_in_dialog_message))
-                    .setNegativeButton(getString(R.string.sign_in_dialog_later)) { _, _ ->
-                        return@setNegativeButton
-                    }
-                    .setPositiveButton(getString(R.string.sign_in_dialog_ok)) { _, _ ->
-                        findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
-                    }
-                    .show()
+            if (auth.authStateFlow.value.id == 0L) {
+                dialog.show()
             } else {
                 findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
             }

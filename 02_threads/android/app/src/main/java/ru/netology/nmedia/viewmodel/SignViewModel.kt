@@ -2,12 +2,13 @@ package ru.netology.nmedia.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.netology.nmedia.repository.SignRepository
-import ru.netology.nmedia.repository.SignRepositoryImpl
+import javax.inject.Inject
 
-class SignViewModel : ViewModel() {
-    private val repository: SignRepository = SignRepositoryImpl()
+@HiltViewModel
+class SignViewModel @Inject constructor(private val repository: SignRepository) : ViewModel() {
 
     fun updateUser(login: String, password: String) {
         viewModelScope.launch {

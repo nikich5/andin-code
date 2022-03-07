@@ -12,7 +12,7 @@ import ru.netology.nmedia.R
 import ru.netology.nmedia.databinding.FragmentImageBinding
 import ru.netology.nmedia.util.StringArg
 
-private const val BASE_URL = "http://192.168.0.10:9999"
+private const val BASE_URL = "http://192.168.0.11:9999"
 
 class ImageFragment : Fragment() {
 
