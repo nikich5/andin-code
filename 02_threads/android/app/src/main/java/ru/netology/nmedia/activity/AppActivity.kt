@@ -31,7 +31,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
     @Inject
     lateinit var googleApiAvailability: GoogleApiAvailability
 
-    private val viewModel: AuthViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +56,7 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
                 )
         }
 
-        viewModel.data.observe(this) {
+        authViewModel.data.observe(this) {
             invalidateOptionsMenu()
         }
 
@@ -77,8 +77,8 @@ class AppActivity : AppCompatActivity(R.layout.activity_app) {
         menuInflater.inflate(R.menu.sign_menu, menu)
 
         menu.let {
-            it.setGroupVisible(R.id.unauthenticated, !viewModel.authenticated)
-            it.setGroupVisible(R.id.authenticated, viewModel.authenticated)
+            it.setGroupVisible(R.id.unauthenticated, !authViewModel.authenticated)
+            it.setGroupVisible(R.id.authenticated, authViewModel.authenticated)
         }
         return true
     }

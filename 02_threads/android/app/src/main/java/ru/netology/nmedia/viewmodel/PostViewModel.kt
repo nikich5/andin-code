@@ -3,7 +3,6 @@ package ru.netology.nmedia.viewmodel
 import android.net.Uri
 import androidx.lifecycle.*
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -37,7 +36,7 @@ private val noPhoto = PhotoModel()
 @HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
-    private val auth: AppAuth
+    auth: AppAuth
 ) : ViewModel() {
 
     @OptIn(ExperimentalCoroutinesApi::class)

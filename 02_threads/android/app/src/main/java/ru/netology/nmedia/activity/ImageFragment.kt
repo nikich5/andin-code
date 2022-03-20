@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.nmedia.R
 
 import ru.netology.nmedia.databinding.FragmentImageBinding
@@ -14,6 +15,7 @@ import ru.netology.nmedia.util.StringArg
 
 private const val BASE_URL = "http://192.168.0.11:9999"
 
+@AndroidEntryPoint
 class ImageFragment : Fragment() {
 
     companion object {
