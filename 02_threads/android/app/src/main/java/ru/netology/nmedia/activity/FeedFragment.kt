@@ -20,6 +20,7 @@ import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.StringArg
+import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
 import javax.inject.Inject
 
@@ -31,7 +32,9 @@ class FeedFragment : Fragment() {
         var Bundle.textArg: String? by StringArg
     }
 
-    private val viewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val postViewModel: PostViewModel by viewModels(ownerProducer = ::requireParentFragment)
+    private val authViewModel: AuthViewModel by viewModels(ownerProducer = ::requireParentFragment)
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,22 +52,22 @@ class FeedFragment : Fragment() {
             }
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
-                viewModel.edit(post)
+                postViewModel.edit(post)
             }
             override fun onLike(post: Post) {
                 if (auth.authStateFlow.value.id == 0L) {
                     dialog.show()
                 } else {
                     if (!post.likedByMe) {
-                        viewModel.likeById(post.id)
+                        postViewModel.likeById(post.id)
                     } else {
-                        viewModel.removeLikeById(post.id)
+                        postViewModel.removeLikeById(post.id)
                     }
                 }
             }
 
             override fun onRemove(post: Post) {
-                viewModel.removeById(post.id)
+                postViewModel.removeById(post.id)
             }
 
             override fun onShare(post: Post) {
@@ -88,12 +91,12 @@ class FeedFragment : Fragment() {
         binding.list.adapter = adapter
 
         lifecycleScope.launchWhenCreated {
-            viewModel.data.collectLatest { state ->
+            postViewModel.data.collectLatest { state ->
                 adapter.submitData(state)
             }
         }
 
-        viewModel.authData.observe(viewLifecycleOwner) {
+        authViewModel.data.observe(viewLifecycleOwner) {
             adapter.refresh()
         }
 
