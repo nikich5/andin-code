@@ -8,26 +8,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
 import ru.netology.nmedia.adapter.PostsAdapter
-import ru.netology.nmedia.auth.AppAuth
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
 import ru.netology.nmedia.util.StringArg
 import ru.netology.nmedia.viewmodel.AuthViewModel
 import ru.netology.nmedia.viewmodel.PostViewModel
-import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class FeedFragment : Fragment() {
-    @Inject
-    lateinit var auth: AppAuth
+
     companion object {
         var Bundle.textArg: String? by StringArg
     }
@@ -55,7 +54,7 @@ class FeedFragment : Fragment() {
                 postViewModel.edit(post)
             }
             override fun onLike(post: Post) {
-                if (auth.authStateFlow.value.id == 0L) {
+                if (!authViewModel.authenticated) {
                     dialog.show()
                 } else {
                     if (!post.likedByMe) {
@@ -90,9 +89,9 @@ class FeedFragment : Fragment() {
         })
         binding.list.adapter = adapter
 
-        lifecycleScope.launchWhenCreated {
-            postViewModel.data.collectLatest { state ->
-                adapter.submitData(state)
+        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenCreated {
+            postViewModel.data.collectLatest {
+                adapter.submitData(it)
             }
         }
 
@@ -100,12 +99,12 @@ class FeedFragment : Fragment() {
             adapter.refresh()
         }
 
-        lifecycleScope.launchWhenCreated {
-            adapter.loadStateFlow.collectLatest { state ->
+        viewLifecycleOwner.lifecycle.coroutineScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest {
                 binding.swiperefresh.isRefreshing =
-                    state.refresh is LoadState.Loading ||
-                            state.prepend is LoadState.Loading ||
-                            state.append is LoadState.Loading
+                    it.refresh is LoadState.Loading ||
+                            it.prepend is LoadState.Loading ||
+                            it.append is LoadState.Loading
             }
         }
 
@@ -118,7 +117,7 @@ class FeedFragment : Fragment() {
         }
 
         binding.fab.setOnClickListener {
-            if (auth.authStateFlow.value.id == 0L) {
+            if (!authViewModel.authenticated) {
                 dialog.show()
             } else {
                 findNavController().navigate(R.id.action_feedFragment_to_newPostFragment)
