@@ -1,6 +1,8 @@
 package ru.netology.nmedia.repository
 
 import androidx.paging.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
@@ -22,9 +24,9 @@ import javax.inject.Singleton
 @Singleton
 class PostRepositoryImpl @Inject constructor(
     private val apiService: ApiService,
-    db: AppDb,
+    private val db: AppDb,
     private val postDao: PostDao,
-    postRemoteKeyDao: PostRemoteKeyDao,
+    private val postRemoteKeyDao: PostRemoteKeyDao,
 ) : PostRepository {
 
     @OptIn(ExperimentalPagingApi::class)
@@ -103,6 +105,23 @@ class PostRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getNewerCount(): Flow<Int> = flow {
+        while (true) {
+            delay(10_000L)
+            val maxId = postRemoteKeyDao.max() ?: 0L
+            val response = apiService.getNewer(maxId)
+            if (!response.isSuccessful) {
+                throw ApiError(response.code(), response.message())
+            }
+
+            val body = response.body() ?: throw ApiError(response.code(), response.message())
+            postDao.insert(body.toEntity())
+            emit(body.size)
+        }
+    }
+        .catch { throw(it) }
+        .flowOn(Dispatchers.Default)
+
     override suspend fun removeById(id: Long) {
         try {
             postDao.removeById(id)
@@ -144,4 +163,6 @@ class PostRepositoryImpl @Inject constructor(
             throw UnknownError
         }
     }
+
+
 }

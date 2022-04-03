@@ -15,4 +15,5 @@ interface PostRepository {
     suspend fun likeById(id: Long)
     suspend fun removeLikeById(id: Long)
     suspend fun upload(upload: MediaUpload): Media
+    fun getNewerCount(): Flow<Int>
 }

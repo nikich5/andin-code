@@ -30,10 +30,21 @@
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/errorGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="retryTitle,retryButton" />
+
+    <Button
+        android:id="@+id/newerPosts"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="retryTitle,retryButton" />
+        android:layout_margin="@dimen/common_spacing"
+        android:text="@string/new_posts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/emptyText"

@@ -43,5 +43,6 @@
     <string name="name">name</string>
     <string name="signup">signup</string>
     <string name="password_error">Password mismatch</string>
+    <string name="new_posts">New posts</string>
 
 </resources>

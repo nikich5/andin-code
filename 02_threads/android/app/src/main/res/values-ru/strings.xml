@@ -44,4 +44,5 @@
     <string name="name">имя</string>
     <string name="signup">Зарегистрироваться</string>
     <string name="password_error">Пароли не совпадают</string>
+    <string name="new_posts">Новые записи</string>
 </resources>
