@@ -16,6 +16,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
 import ru.netology.nmedia.R
 import ru.netology.nmedia.adapter.OnInteractionListener
+import ru.netology.nmedia.adapter.PagingLoadStateAdapter
 import ru.netology.nmedia.adapter.PostsAdapter
 import ru.netology.nmedia.databinding.FragmentFeedBinding
 import ru.netology.nmedia.dto.Post
@@ -49,6 +50,7 @@ class FeedFragment : Fragment() {
             .setPositiveButton(getString(R.string.sign_in_dialog_ok)) { _, _ ->
                 findNavController().navigate(R.id.action_feedFragment_to_signInFragment)
             }
+
         val adapter = PostsAdapter(object : OnInteractionListener {
             override fun onEdit(post: Post) {
                 postViewModel.edit(post)
@@ -87,7 +89,18 @@ class FeedFragment : Fragment() {
                     { textArg = post.attachment?.url })
             }
         })
-        binding.list.adapter = adapter
+        binding.list.adapter = adapter.withLoadStateHeaderAndFooter(
+            header = PagingLoadStateAdapter(object : PagingLoadStateAdapter.OnInteractionListener {
+                override fun onRetry() {
+                    adapter.retry()
+                }
+            }),
+            footer = PagingLoadStateAdapter(object : PagingLoadStateAdapter.OnInteractionListener {
+                override fun onRetry() {
+                    adapter.retry()
+                }
+            }),
+        )
 
         viewLifecycleOwner.lifecycle.coroutineScope.launchWhenCreated {
             postViewModel.data.collectLatest {
@@ -102,9 +115,7 @@ class FeedFragment : Fragment() {
         viewLifecycleOwner.lifecycle.coroutineScope.launchWhenCreated {
             adapter.loadStateFlow.collectLatest {
                 binding.swiperefresh.isRefreshing =
-                    it.refresh is LoadState.Loading ||
-                            it.prepend is LoadState.Loading ||
-                            it.append is LoadState.Loading
+                    it.refresh is LoadState.Loading
             }
         }
 

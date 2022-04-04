@@ -35,8 +35,8 @@ private val empty = Post(
 
 private val noPhoto = PhotoModel()
 
-@HiltViewModel
 @ExperimentalCoroutinesApi
+@HiltViewModel
 class PostViewModel @Inject constructor(
     private val repository: PostRepository,
     private val auth: AppAuth
@@ -50,8 +50,6 @@ class PostViewModel @Inject constructor(
                 }
             }
         }
-
-//    val newerCount: LiveData<Int> = repository.getNewerCount().asLiveData(Dispatchers.Default)
 
     private val _dataState = MutableLiveData<FeedModelState>()
     val dataState: LiveData<FeedModelState>
